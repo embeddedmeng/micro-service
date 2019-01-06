@@ -1,0 +1,60 @@
+# 所有容器配置
+version: '3'
+services:
+  redis:
+    image: redis
+    hostname: redis
+    restart: always
+    ports:
+      - 6379:6379
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  message:
+    build: message
+    image: micro-service-message
+    environment:
+      CONFIG_SERVICE_PASSWORD: admin
+    restart: always
+    ports:
+      - 7000:7000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  user:
+    build: user
+    image: micro-service-user
+    environment:
+      CONFIG_SERVICE_PASSWORD: admin
+      mysql.address: 192.168.1.15
+    restart: always
+    depends_on:
+      - redis
+      - message
+    ports:
+      - 8001:8001
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  zuul:
+    build: zuul
+    image: micro-service-zuul
+    environment:
+      CONFIG_SERVICE_PASSWORD: admin
+    restart: always
+    depends_on:
+      - redis
+      - message
+      - user
+    ports:
+      - 80:80
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"

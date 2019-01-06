@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: message
+  mail:
+    host: smtp.ym.163.com  # 163邮件host
+    username: mail@esugar.cn # 163邮箱账号
+    password: asdw1234 # 邮箱密码
+
+server:
+  servlet:
+    context-path: /message
+  port: 7000
+

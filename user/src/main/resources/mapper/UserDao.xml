@@ -1,0 +1,43 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.embeddedmeng.userapi.dao.UserDao">
+
+    <resultMap id="user" type="User">
+        <id property="userId" jdbcType="INTEGER" column="user_id" />
+        <result property="email" jdbcType="VARCHAR" column="email" />
+        <result property="password" jdbcType="VARCHAR" column="password" />
+    </resultMap>
+
+    <!--插入一条成功记录-->
+    <insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="user.userId">
+      INSERT
+        ignore
+      INTO
+        user (email, password)
+      VALUES
+        (#{user.email, jdbcType=VARCHAR}, #{user.password, jdbcType=VARCHAR});
+    </insert>
+
+    <!--根据用户id查询用户-->
+    <select id="selectUserByEmail" resultType="user">
+      SELECT
+        *
+      FROM
+        user
+      WHERE
+        email=#{email};
+    </select>
+
+
+    <select id="selectUserInfo" resultType="user">
+      SELECT
+        *
+      FROM
+        user
+      WHERE
+        user_id=#{userId};
+    </select>
+
+</mapper>
